@@ -1,1 +1,2 @@
-# Qt-Tetris
+# QtTetris
+
