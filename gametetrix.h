@@ -1,16 +1,28 @@
 #ifndef GAMETETRIX_H
 #define GAMETETRIX_H
 
-#include <QtGlobal>
-#include <QDebug>
+//#ifdef NAME_MACROS
 
-#include <figure.h>
-#include <field.h>
+//#endif
+
+#ifdef UnixClean
+        system("cls");
+#endif
+
+#ifdef WinClean
+        system("clear");
+#endif
+
+
+#include "figure.h"
+#include "field.h"
 
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
+
+//#include <QTimer>
 
 ///Figure
 ///= {
@@ -34,11 +46,21 @@ private:
   std::vector<Figure> _vecFigure;
   Field _field;
 
+//  QTimer * _timer;
+
 public:
   GameTetrix();
   ~GameTetrix();
 
   void start();
+
+//private slots:
+//    void updateTime();
+
+private:
+    unsigned int myRand();
+
+
 };
 
 #endif // GAMETETRIX_H
