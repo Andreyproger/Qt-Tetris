@@ -7,6 +7,8 @@ Field::Field()
       {
         _fieldGame[j][i] = 0; ///< пустые клетки поля
       }
+
+  score = 0;
 }
 
 Field::~Field()
@@ -25,26 +27,24 @@ void Field::eraseLines()
             ++counter;
         }
       if(width == counter)
-        {
-          for(int k = j; k > 0; --k) ///< смещаем всё что выше
+        {//смещаем всё что выше
+          for(int k = j; k > 0; --k)
             {
               for(int t = 0; t < width; ++t)
                 {
                   _fieldGame[k][t] = _fieldGame[k - 1][t];
                 }
             }
-          ///< занулили верхнюю строчку
+          score += 100;
+          //занулили верхнюю строчку
           for(int i = 0; i < width; ++i)
             {
               _fieldGame[0][i] = 0;
             }
-
-           _score +=_scoreDelLine;
-
         }
       else
         {
-          --j; ///< если ничего не сделано, то переходим к следующей строчке (двигаемся вверх)
+          --j; ///если ничего не сделано, то переходим к следующей строчке (двигаемся вверх)
         }
     }
 }
@@ -57,12 +57,11 @@ int touchX(const Figure & fig)
 
 int touchY(const Figure & fig)
 {
-///  Q_UNUSED(fig);
   int touchy = 0;
   return touchy;
 }
 
-///< проверка каждой клетки
+//проверка каждой клетки
 bool Field::canDown()
 {
   for(int i = 0; i < 4; ++i)
@@ -89,7 +88,7 @@ void Field::moveDown()
     }
   else
     {
-      std::cout << "CAN NOT DOWN" << std::endl;
+//      std::cout << "CAN NOT DOWN" << std::endl;
       for(int i = 0; i < _figure->width; ++i)
         for(int j = 0; j < _figure->height; ++j)
           {
@@ -103,7 +102,7 @@ void Field::moveDown()
       eraseLines();
     }
 
-  //printf("movedown ret\n");
+  printf("movedown ret\n");
 }
 
 bool Field::moveLeft()
@@ -114,10 +113,10 @@ bool Field::moveLeft()
         if(_figure->mask[j][i])
           {
             if(_x + i - 1 < 0)
-              return false; ///< не можем двинуть фигуру влево
+              return false;
 
             if(_fieldGame[_y + j][_x + i - 1])
-              return false; ///< поле занято -> не можем сдвинуть
+              return false; ///не можем двинуть фигуру влево
           }
       }
 
@@ -179,11 +178,8 @@ bool Field::isActiveFigureOnField()
   return _figure != nullptr;
 }
 
-void Field::printField() const
+void Field::printField()
 {
-
-  std::cout << "SCORE: " << _score << " |" << std::endl;
-
   char _tempFieldGame[height][width];
 
   for(int j = 0; j < height; ++j)
@@ -206,7 +202,7 @@ void Field::printField() const
           }
       }
   }
-  std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" <<std::endl;
+
   for(int j = 0; j < height; ++j)
   {
       std::cout<< j << "\t";
@@ -216,16 +212,43 @@ void Field::printField() const
       }
     std::cout << std::endl;
    }
+
+  std::cout << "SCORE: " << score << " !\n" << std::endl;
 }
 
-void Field::rotateFigure()
-{
-    Figure * oldFigure = _figure;
-    _figure = new Figure(_figure->rotate());
-    delete oldFigure;
-}
 
-unsigned int Field::score() const
+bool Field::rotateFigure()
 {
-  return _score;
+  auto rotated = _figure->rotate();
+  for(int i = 0; i < rotated.height; ++i)
+    for(int j = 0; j < rotated.width; ++j)
+    {
+      if(!rotated.mask[i][j])
+        continue;
+
+      printf("i = %d, j = %d ", i, j);
+
+      if(_x + j >= width) {
+        printf("width out\n");
+        return false;
+      }
+ 
+      if(_y + i >= height) {
+        printf("height out\n");
+        return false;
+      }
+
+      if(_fieldGame[_y + i][_x + j]) {
+        printf("crossing\n");
+        return false;
+      }
+
+      printf("\n");
+    }
+  
+	std::cout << std::endl << "ROTATE" << std::endl << std::endl;
+	Figure * oldfigure = _figure;
+	_figure = new Figure(rotated);
+	delete oldfigure;
+  return true;
 }

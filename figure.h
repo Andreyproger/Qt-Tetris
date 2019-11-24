@@ -14,8 +14,7 @@ public:
   bool mask[4][4];
 
   Figure rotate(); // возвращает копию, чтобы не портили исходную фигуру
-  void rotateFigure();
-  void printFigure();
+
 };
 
 #endif // FIGURE_H

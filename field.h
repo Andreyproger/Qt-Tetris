@@ -2,7 +2,6 @@
 #define FIELD_H
 #include "figure.h"
 #include <iostream>
-//#include <QtGlobal>
 
 const int width  = 10;
 const int height = 15;
@@ -20,22 +19,20 @@ public:
   void insertFigure(Figure * figure);
   bool canAddFigure(const Figure & figure);
   bool isActiveFigureOnField();
-  void printField() const;
-  void rotateFigure();
-  unsigned int score() const;
+  void printField();
+  bool rotateFigure();
 
 private:
   bool canDown();
   void eraseLines();
   int _fieldGame[height][width];
+  int score;
 
-  Figure * _figure; ///< текущая фигура
+  Figure * _figure; /// текущая фигура
 
-  ///< вверхняя левая точка (координаты) фигуры
-  int _x;       ///< по горизонтали
-  int _y;       ///< по вертикали
-  const int _scoreDelLine = 100;
-  unsigned int _score = 0; ///< количество очков в игре
+  /// вверхняя левая точка (координаты)
+  int _x;       /// по горизонтали
+  int _y;       /// по вертикали
 };
 
 #endif // FIELD_H

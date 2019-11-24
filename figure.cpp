@@ -1,23 +1,6 @@
 #include "figure.h"
+
 #include <algorithm>
-#include <iostream>
-
-
-//class vector2d
-//{
-//    QVector2D
-//    void rotate()
-//    {
-//        std::swap(_x,_y);
-//    }
-//    int _x;
-//    int _y;
-//}
-
-
-
-//vector2d(const vector2d&)
-//std::vector<vector2d>
 
 Figure::Figure()
 {}
@@ -62,39 +45,26 @@ Figure Figure::rotate()
       {
         newMask[i][3 - j] = this->mask[j][i];
       }
-  Figure(newMask).printFigure(); /// todo delete
-  return Figure(newMask);
+
   //сдвиг к левому верхнему углу
   int minX = 3;
   for(int i = 0; i < 4; ++i)
     for(int j = 0; j < 4; ++j)
       {
-        if(newMask[j][i])
+        if(newMask[i][j])
           {
-            minX = std::min(j , minX);
+            minX = std::min(j, minX);
           }
       }
 
   for(int i = 0; i < 4; ++i)
     for(int j = 0; j < 4; ++j)
-      newMask[i][j] = newMask[i][(j+minX) % 4]; /// остаток от деления(кольцо вычетов по модулю 4)
-
-  Figure(newMask).printFigure();
+      if(j + minX >= 4)
+        newMask[i][j] = 0;
+      else
+        newMask[i][j] = newMask[i][j + minX]; /// остаток от деления(кольцо вычетов по модулю 4)
 
   return Figure(newMask);
-}
-
-//печать маски фигуры
-void Figure::printFigure()
-{
-    for(int j = 0; j < height; j++)
-    {
-        for(int i = 0; i < width; i++)
-        {
-            std::cout << this->mask[j][i];
-        }
-        std::cout << std::endl;
-    }
 }
 
 Figure::~Figure()

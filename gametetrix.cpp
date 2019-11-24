@@ -1,5 +1,4 @@
 #include "gametetrix.h"
-//#include <QObject>
 
 GameTetrix::GameTetrix()
 {
@@ -44,6 +43,7 @@ GameTetrix::GameTetrix()
     {1,1,0,0},
     {0,0,0,0},
   };
+
   Figure lFig = l;
   _vecFigure.push_back(lFig);
   _vecFigure.push_back(lFig.rotate());
@@ -56,6 +56,7 @@ GameTetrix::GameTetrix()
     {0,0,0,0},
     {0,0,0,0},
   };
+
   Figure qFig = q;
   _vecFigure.push_back(qFig);
 
@@ -65,6 +66,7 @@ GameTetrix::GameTetrix()
     {0,0,0,0},
     {0,0,0,0},
   };
+
   Figure zFig = z;
   _vecFigure.push_back(zFig);
   _vecFigure.push_back(zFig.rotate());
@@ -72,56 +74,46 @@ GameTetrix::GameTetrix()
   _vecFigure.push_back(zFig.rotate());
 
   bool s[4][4] = {
-    {1,1,0,0},
     {0,1,1,0},
+    {1,1,0,0},
     {0,0,0,0},
     {0,0,0,0},
   };
+
   Figure sFig = s;
   _vecFigure.push_back(sFig);
   _vecFigure.push_back(sFig.rotate());
   _vecFigure.push_back(sFig.rotate());
   _vecFigure.push_back(sFig.rotate());
-
-//  _timer = new QTimer();
-//  _timer->setInterval(1000);
-//  QObject::connect(_timer,
-//                   SIGNAL(timeout()),
-//                   this,
-//                   SLOT()
-////                   [this]()
-////                    {
-////                        _field.printField();
-////                    }
-//                   );
-//  _timer->start();
-
 }
 
 GameTetrix::~GameTetrix()
 {}
 
-unsigned int GameTetrix::myRand()
-{
-    return (static_cast<unsigned int>(rand()) % (_vecFigure.size()));
-}
-
 void GameTetrix::start()
 {
-  auto figure = _vecFigure[myRand()];
+  auto figure = _vecFigure[rand()%_vecFigure.size()];
   _field.insertFigure(new Figure(figure));
   _field.printField();
   std::cout << std::endl;
 
-  bool gameOver = true;
+  char seq[] = { 'a', 'a', 'a', 'd', 'd', 's', 's', 's',
+                 's', 's', 's', 's', 's', 's', 's', 's',
+                 's', 's', 's', 's', 's', 's', 's', 's'};
+  int i = 0;
 
-  while(gameOver)
-  {
-      char input = char(getchar());
+  bool gamePlay = true;
+  while(gamePlay)
+    {
+      char input = getchar();
       system("cls");
+      //system("clear");
+      srand(time(NULL));
+
+      system("pause");
       switch(input)
         {
-          case 'a':
+           case 'a':
             _field.moveLeft();
             break;
 
@@ -134,40 +126,30 @@ void GameTetrix::start()
             break;
 
            case 'e':
+            std::cout << std::endl << "In case 'e': ROTATE" << std::endl << std::endl;
             _field.rotateFigure();
             break;
-
-           default:
-            _field.moveDown();
-            break;
-      }
-      //printf("printfield\n");
+        }
+      printf("printfield\n");
       _field.printField();
       std::cout << std::endl;
 
       if(_field.isActiveFigureOnField())
         continue;
 
-      std::cout << "addr";
-      figure = _vecFigure[myRand()];
-      std::cout << "canAdd";
+      figure = _vecFigure[rand()%_vecFigure.size()];
 
-      gameOver = _field.canAddFigure(figure);
+      gamePlay = _field.canAddFigure(figure);
 
-      if(gameOver) {
+      if(gamePlay) {
         Figure * newFigure = new Figure(figure);
         _field.insertFigure(newFigure);
-      } else {
-
-        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-        std::cout << "GAME OVER" << std::endl;
-        std::cout << "YOUR SCORE: " << _field.score() << " !" << std::endl;
-        std::cout << "Press enter to continue...";
-        std::cin.get();
-
-        system("pause");
-
+      }
+      else
+      {
+        std::cout << "GAME OVER";
         break;
       }
+      _field.moveDown();
     }
 }
