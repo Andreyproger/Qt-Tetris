@@ -1,5 +1,4 @@
 #include "figure.h"
-
 #include <algorithm>
 
 Figure::Figure()

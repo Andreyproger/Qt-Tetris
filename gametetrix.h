@@ -9,6 +9,11 @@
 #include <stdlib.h>
 #include <iostream>
 #include <time.h>
+//      #if defined(_WIN32) || defined(_WIN64)
+        #include <conio.h>
+//#elif defined(_linux)
+//#include <curses.h>
+
 
 ///Figure
 ///= {

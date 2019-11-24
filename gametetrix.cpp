@@ -97,20 +97,20 @@ void GameTetrix::start()
   _field.printField();
   std::cout << std::endl;
 
-  char seq[] = { 'a', 'a', 'a', 'd', 'd', 's', 's', 's',
-                 's', 's', 's', 's', 's', 's', 's', 's',
-                 's', 's', 's', 's', 's', 's', 's', 's'};
+  // char seq[] = { 'a', 'a', 'a', 'd', 'd', 's', 's', 's',
+  //                's', 's', 's', 's', 's', 's', 's', 's',
+  //                's', 's', 's', 's', 's', 's', 's', 's'};
   int i = 0;
 
   bool gamePlay = true;
   while(gamePlay)
     {
-      char input = getchar();
-      system("cls");
-      //system("clear");
-      srand(time(NULL));
 
-      system("pause");
+      srand(time(NULL));
+      char input = getch();
+
+      //system("clear");
+
       switch(input)
         {
            case 'a':
@@ -129,7 +129,16 @@ void GameTetrix::start()
             std::cout << std::endl << "In case 'e': ROTATE" << std::endl << std::endl;
             _field.rotateFigure();
             break;
+
+           case 'q':
+            gamePlay = false;
+            break;
         }
+      #if defined(_WIN32) || defined(_WIN64)
+            system("cls");
+      #elif defined(_linux)
+            system("clear");
+      #endif
       printf("printfield\n");
       _field.printField();
       std::cout << std::endl;
@@ -144,10 +153,12 @@ void GameTetrix::start()
       if(gamePlay) {
         Figure * newFigure = new Figure(figure);
         _field.insertFigure(newFigure);
+        //_field.moveDown();
       }
       else
       {
         std::cout << "GAME OVER";
+        gamePlay = false;
         break;
       }
       _field.moveDown();
